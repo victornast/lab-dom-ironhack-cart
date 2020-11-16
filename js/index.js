@@ -38,6 +38,7 @@ function removeProduct(event) {
   console.log('The target in remove is:', target);
   //... your code goes here
   const myParent = target.closest('.product');
+  console.log(myParent);
   myParent.remove();
   calculateAll();
 }
@@ -46,6 +47,36 @@ function removeProduct(event) {
 
 function createProduct() {
   //... your code goes here
+  const newProductNameInput = document.querySelectorAll(
+    '.create-product input'
+  )[0];
+  const newProductName = newProductNameInput.value;
+  if (newProductName === '') return;
+  const newProductPriceInput = document.querySelectorAll(
+    '.create-product input'
+  )[1];
+  const newProductPrice = newProductPriceInput.value;
+
+  //add new product
+  const productList = document.querySelector('#cart tbody');
+  const myNewProduct = document.createElement('tr');
+  myNewProduct.classList.add('product');
+  myNewProduct.innerHTML = `
+  <td class="name"><span>${newProductName}</span></td>
+  <td class="price">$<span data-price>${newProductPrice}</span></td>
+  <td class="quantity"><input type="number" value="0" min="0" placeholder="Quantity" /></td>
+  <td class="subtotal">$<span>0</span></td>
+  <td class="action"><button class="btn btn-remove">Remove</button></td>`;
+
+  console.log(myNewProduct);
+  productList.appendChild(myNewProduct);
+  //reset input
+  newProductNameInput.value = '';
+  newProductPriceInput.value = 0;
+  calculateAll();
+  newRmvBtn = productList.querySelector('tr:last-child .btn-remove');
+  // console.log(newRmvBtn);
+  newRmvBtn.addEventListener('click', removeProduct);
 }
 
 window.addEventListener('load', () => {
@@ -53,8 +84,12 @@ window.addEventListener('load', () => {
   calculatePricesBtn.addEventListener('click', calculateAll);
 
   //... your code goes here
-  const removeBtnCollection = document.getElementsByClassName('action');
+  const removeBtnCollection = document.getElementsByClassName('btn-remove');
   for (button of removeBtnCollection) {
     button.addEventListener('click', removeProduct);
   }
+
+  //Iteration 5
+  const addProduct = document.getElementById('create');
+  addProduct.addEventListener('click', createProduct);
 });
